@@ -2,6 +2,7 @@ var React = require('react');
 var WeatherMessage = require('WeatherMessage');
 var WeatherForm = require('WeatherForm');
 var OpenWeatherMap= require('OpenWeatherMap');
+var ErrorModal = require('ErrorModal');
 
 var WatherContainer = React.createClass({
 
@@ -15,7 +16,10 @@ var WatherContainer = React.createClass({
         var that = this;
 
 
-
+        this.setState({
+            isLoading:true,
+            isError:undefined
+        })
         this.setState({isLoading: true});
         OpenWeatherMap.getTemp(obj.cityName).then(function (temp) {
             that.setState({
@@ -24,12 +28,15 @@ var WatherContainer = React.createClass({
                 isLoading:false
             })
         },function (errorMessage) {
-            alert(errorMessage);
+            that.setState({
+                isLoading:false,
+                isError:true
+            })
         });
     },
 
     render:function () {
-        var { isLoading, cityName, temprature } = this.state;
+        var { isLoading, cityName, temprature, isError } = this.state;
 
         function renderMessage() {
 
@@ -41,10 +48,19 @@ var WatherContainer = React.createClass({
 
         }
 
+        function  renderError() {
+            if ( isError ){
+                return (
+                    <ErrorModal title="Search Error" message="Can't find the city"/>
+                );
+            }
+        }
+
         return (
             <div>
                 <WeatherForm onCityInput={this.onCityInput}/>
                 {renderMessage()}
+                {renderError()}
             </div>
         );
     }
