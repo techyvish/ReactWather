@@ -4,10 +4,8 @@ var About = React.createClass({
 
     render:function () {
         return (
-            <div>
-                <h3 className="text-centered"> About Component </h3>
-                <p> This is weather app.</p>
-            </div>
+            <h3> About Component </h3>
+
         );
     }
 
